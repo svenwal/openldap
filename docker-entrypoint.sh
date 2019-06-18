@@ -122,7 +122,6 @@ dpkg-reconfigure -f noninteractive slapd
 
 touch /var/lib/ldap/docker_configured
 
-
 # Configure phpldapadmin
 DC='dc='$(echo ${LDAP_DOMAIN} | cut -d "." -f 1)',dc='$(echo ${LDAP_DOMAIN} | cut -d "." -f 2)
 sed -i "s/\(\$servers->setValue('server','name','\)\(.*\)\(');\)$/\1${LDAP_SERVERNAME}\3/g" /etc/phpldapadmin/config.php
@@ -139,9 +138,31 @@ else
 	status "found already-configured slapd"
 fi
 
+
+PARSED_DC='dc='$(echo ${LDAP_DOMAIN} | cut -d "." -f 1)',dc='$(echo ${LDAP_DOMAIN} | cut -d "." -f 2)
+
+if [ -z "${LDAP_USER_LOGIN}" ] || [ -z "${LDAP_USER_FIRSTNAME}" ] || [ -z "${LDAP_USER_LASTNAME}" ] || [ -z "${LDAP_USER_EMAIL}" ] || [ -z "${LDAP_USER_PASSWORD}" ]
+then
+  echo "No initial user requested"
+else
+cat > /tmp/user.ldif <<EOF
+dn: cn=${LDAP_USER_LOGIN},ou=people,$PARSED_DC
+cn: ${LDAP_USER_LOGIN}
+displayname: ${LDAP_USER_FIRSTNAME} ${LDAP_USER_LASTNAME}
+givenname: ${LDAP_USER_FIRSTNAME}
+mail: ${LDAP_USER_EMAIL}
+objectclass: top
+objectclass: inetOrgPerson
+sn: ${LDAP_USER_LASTNAME}
+uid: ${LDAP_USER_LOGIN}
+userpassword: $(slappasswd -s ${LDAP_USER_PASSWORD} -h {SSHA})
+EOF
+  ldapadd -D "cn=admin,$PARSED_DC" -w $LDAP_PASSWORD -h localhost -f /tmp/user.ldif
+  rm /tmp/user.ldif
+fi
+
 status "starting slapd"
 set -x
 
 /etc/init.d/slapd stop
 /etc/init.d/slapd start
-

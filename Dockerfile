@@ -1,5 +1,5 @@
-FROM debian:8.2
-MAINTAINER Speed03 <speed@sealeo.org>
+FROM debian:jessie
+MAINTAINER SvenWal <sven@svenwal.de>
 
 RUN apt-get update&&apt-get upgrade -y
 RUN apt-get install apt-utils -y
@@ -16,6 +16,12 @@ ENV LDAP_PASSWORD password
 ENV LDAP_ORGANISATION Inc.
 ENV LDAP_DOMAIN example.com
 ENV LDAP_SERVERNAME "My LDAP server"
+
+ENV LDAP_USER_LOGIN username
+ENV LDAP_USER_FIRSTNAME Firstname
+ENV LDAP_USER_LASTNAME Lastname
+ENV LDAP_USER_EMAIL "example@example.com"
+ENV LDAP_USER_PASSWORD password
 
 RUN echo "[supervisord]" > /etc/supervisord.conf && \
     echo "nodaemon=true" >> /etc/supervisord.conf && \

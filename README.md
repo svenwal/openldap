@@ -1,8 +1,8 @@
-# sealeo/openldap (Deprecated)
+# svenwal/openldap
 
-[hub]: https://hub.docker.com/r/sealeo/openldap/
+[hub]: https://hub.docker.com/r/svenwal/openldap
 
-OpenLDAP 2.4.40 - [Docker Hub](https://hub.docker.com/r/sealeo/openldap/) 
+OpenLDAP 2.4.40 - [Docker Hub](https://hub.docker.com/r/svenwal/openldap) 
 
 **A docker image to run OpenLDAP with PHPLDAPAdmin**
 
@@ -12,7 +12,7 @@ OpenLDAP 2.4.40 - [Docker Hub](https://hub.docker.com/r/sealeo/openldap/) 
 
 If you run your container with docker CLI :
 ```bash
-docker run -d -v /home/ldap/data:/var/lib/data -p 389:389 -p 80:80 -e LDAP_PASSWORD=password -e LDAP_ORGANISATION="My LDAP Server" -e LDAP_DOMAIN=mydomain.com -e LDAP_SERVERNAME=MyLDAP --name ldap sealeo/openldap
+docker run -d -v /home/ldap/data:/var/lib/data -p 389:389 -p 80:80 -e LDAP_PASSWORD=adminPassword -e LDAP_ORGANISATION="My LDAP Server" -e LDAP_DOMAIN=example.com -e LDAP_SERVERNAME=MyLDAP -e LDAP_USER_LOGIN=username -e LDAP_USER_FIRSTNAME=First -e LDAP_USER_LASTNAME=Last -e LDAP_USER_EMAIL=example@example.com -e LDAP_USER_PASSWORD=password --name ldap sealeo/openldap
 ```
 
 Or if you use *docker-compose*
@@ -28,15 +28,22 @@ services:
       - 389:389
       - 80:80
     environment:
-      - LDAP_PASSWORD=password
+      - LDAP_PASSWORD=adminPassword
       - LDAP_ORGANISATION="My LDAP Server"
-      - LDAP_DOMAIN=mydomain.com
+      - LDAP_DOMAIN=example.com
       - LDAP_SERVERNAME=MyLDAP
+      - LDAP_USER_LOGIN=username
+      - LDAP_USER_FIRSTNAME=First
+      - LDAP_USER_LASTNAME=Last
+      - LDAP_USER_EMAIL=example@example.com
+      - LDAP_USER_PASSWORD=password
 ```
 
 # Usage
 
-To add user and group, 2 scripts are available and you can execute 
+For the automatic creation of an initial user fill out all the LDAP_USER_* variables (see examples above). This user will be created as InetOrtPerson and can be used for non-admin-access
+
+To add users and groups later on, 2 scripts are available and you can execute 
 with *docker exec* command
 
 ## Add user
