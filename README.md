@@ -12,7 +12,7 @@ OpenLDAP 2.4.40 - [Docker Hub](https://hub.docker.com/r/svenwal/openldap) 
 
 If you run your container with docker CLI :
 ```bash
-docker run -d -v /home/ldap/data:/var/lib/data -p 389:389 -p 80:80 -e LDAP_PASSWORD=adminPassword -e LDAP_ORGANISATION="My LDAP Server" -e LDAP_DOMAIN=example.com -e LDAP_SERVERNAME=MyLDAP -e LDAP_USER_LOGIN=username -e LDAP_USER_FIRSTNAME=First -e LDAP_USER_LASTNAME=Last -e LDAP_USER_EMAIL=example@example.com -e LDAP_USER_PASSWORD=password --name ldap sealeo/openldap
+docker run -d -v /home/ldap/data:/var/lib/data -p 389:389 -p 80:80 -e LDAP_PASSWORD=adminPassword -e LDAP_ORGANISATION="My LDAP Server" -e LDAP_DOMAIN=example.com -e LDAP_SERVERNAME=MyLDAP -e LDAP_USER_LOGIN=username -e LDAP_USER_FIRSTNAME=First -e LDAP_USER_LASTNAME=Last -e LDAP_USER_EMAIL=example@example.com -e LDAP_USER_PASSWORD=password --name ldap svenwal/openldap
 ```
 
 Or if you use *docker-compose*
@@ -21,7 +21,7 @@ Or if you use *docker-compose*
 version: '3'
 services:
   ldap:
-    image : sealeo/openldap
+    image : svenwal/openldap
     volumes:
       - /path/ldap/data:/var/lib/ldap
     ports:
